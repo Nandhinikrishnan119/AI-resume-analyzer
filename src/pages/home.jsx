@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, BrainCircuit, FileText, SearchCheck, Sparkles } from "lucide-react";
-import Navbar from "../components/layout/Navbar";
+import Navbar from "../components/layout/navbar";
 import Footer from "../components/layout/Footer";
 
 const features = [
