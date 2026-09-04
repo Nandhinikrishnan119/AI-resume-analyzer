@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BrainCircuit, ChevronDown, ChevronRight, FileText, Sparkles, Star, Upload } from "lucide-react";
-import Navbar from "../components/layout/Navbar";
+import Navbar from "../components/layout/navbar";
 import Footer from "../components/layout/Footer";
 
 const faqs = [
