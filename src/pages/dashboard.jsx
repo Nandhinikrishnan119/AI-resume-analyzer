@@ -1,26 +1,41 @@
-import { AlertTriangle, CheckCircle2, Sparkles } from "lucide-react";
+import { AlertTriangle, CheckCircle2 } from "lucide-react";
+import { useMemo } from "react";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
-
-const breakdown = [
-  { label: "Keywords", score: "82%" },
-  { label: "Format", score: "91%" },
-  { label: "Experience", score: "78%" },
-  { label: "Skills", score: "88%" },
-  { label: "Education", score: "85%" },
-];
-
-const matched = ["React", "Node.js", "TypeScript", "REST API", "Git"];
-const missing = ["Docker", "AWS", "CI/CD"];
-const strengths = ["Clear structure", "Strong summary", "Good keyword fit"];
-const improve = ["Add metrics", "Expand skills", "Use better bullets"];
-const history = [
-  { file: "alex-resume.pdf", score: "87", date: "Jun 29", action: "View" },
-  { file: "frontend-v2.docx", score: "84", date: "Jun 24", action: "View" },
-  { file: "product-design.docx", score: "81", date: "Jun 20", action: "View" },
-];
+import { useAppContext } from "../context/AppContext";
 
 export default function Dashboard() {
+  const { user } = useAppContext();
+  const report = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem("resumeai_report") || "null");
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const strengths = report?.strengths?.length ? report.strengths : ["Clear structure", "Strong summary", "Good keyword fit"];
+  const weaknesses = report?.weaknesses?.length ? report.weaknesses : ["Add metrics", "Expand skills", "Use better bullets"];
+  const suggestions = report?.suggestions?.length ? report.suggestions : [
+    "Highlight measurable outcomes with numbers and impact",
+    "Tailor skills to the target role and keywords",
+    "Keep formatting consistent and easy for ATS to parse",
+  ];
+
+  const breakdown = [
+    { label: "Keywords", score: `${Math.min(100, Math.max(55, report?.score || 82))}%` },
+    { label: "Format", score: "91%" },
+    { label: "Experience", score: "78%" },
+    { label: "Skills", score: "88%" },
+    { label: "Education", score: "85%" },
+  ];
+
+  const matched = ["React", "JavaScript", "TypeScript", "REST API", "Git"];
+  const missing = ["Docker", "AWS", "CI/CD"];
+  const history = [
+    { file: report?.fileName || "resume.pdf", score: String(report?.score || 87), date: new Date().toLocaleDateString(), action: "View" },
+  ];
+
   return (
     <div className="page-shell">
       <Navbar />
@@ -29,17 +44,17 @@ export default function Dashboard() {
           <div className="topbar">
             <div>
               <h1 style={{ fontSize: 24, fontWeight: 700 }}>Your Analysis</h1>
-              <div className="topbar__meta">alex@email.com · Just now</div>
+              <div className="topbar__meta">{user?.email || "user@email.com"} · Just now</div>
             </div>
             <div className="nav-actions">
-              <button className="button button--ghost">Re-analyze</button>
-              <button className="button button--primary">Download Report</button>
+              <button className="button button--ghost" type="button" onClick={() => window.location.href = "/upload"}>Re-analyze</button>
+              <button className="button button--primary" type="button">Download Report</button>
             </div>
           </div>
 
           <div className="stat-grid">
             <div className="stat-card">
-              <div className="stat-card__value">87</div>
+              <div className="stat-card__value">{report?.score ?? 87}</div>
               <div style={{ color: "var(--muted)", fontSize: 13 }}>ATS Score</div>
               <div className="pill pill--success" style={{ marginTop: 12 }}>↑ from 61%</div>
             </div>
@@ -52,7 +67,7 @@ export default function Dashboard() {
               <div style={{ color: "var(--muted)", fontSize: 13 }}>Skills</div>
             </div>
             <div className="stat-card">
-              <div className="stat-card__value">5 items</div>
+              <div className="stat-card__value">{suggestions.length} items</div>
               <div style={{ color: "var(--muted)", fontSize: 13 }}>Suggestions</div>
             </div>
           </div>
@@ -92,18 +107,12 @@ export default function Dashboard() {
             <div className="suggestion-card">
               <h3 style={{ fontSize: 16, fontWeight: 700 }}>AI Suggestions</h3>
               <div className="suggestion-list">
-                {[
-                  { type: "HIGH", text: "Add Docker and AWS to skills section" },
-                  { type: "HIGH", text: "Expand professional summary to 3 sentences" },
-                  { type: "MED", text: "Quantify impact in experience bullets" },
-                  { type: "MED", text: "Add a certifications section" },
-                  { type: "LOW", text: "Include GitHub link in header" },
-                ].map((item) => (
-                  <div key={item.text} className="suggestion-row">
-                    <span className={`pill${item.type === "HIGH" ? " pill--danger" : item.type === "MED" ? " pill--warning" : ""}`} style={{ fontSize: 9 }}>
-                      {item.type}
+                {suggestions.map((item, index) => (
+                  <div key={`${item}-${index}`} className="suggestion-row">
+                    <span className={`pill${index % 2 === 0 ? " pill--danger" : " pill--warning"}`} style={{ fontSize: 9 }}>
+                      {index % 2 === 0 ? "HIGH" : "MED"}
                     </span>
-                    <span>{item.text}</span>
+                    <span>{item}</span>
                   </div>
                 ))}
               </div>
@@ -129,7 +138,7 @@ export default function Dashboard() {
                 <h3 style={{ fontSize: 16, fontWeight: 700 }}>Improve</h3>
               </div>
               <ul className="improve-list">
-                {improve.map((item) => (
+                {weaknesses.map((item) => (
                   <li key={item}><AlertTriangle size={14} color="var(--amber)" />{item}</li>
                 ))}
               </ul>
@@ -150,7 +159,7 @@ export default function Dashboard() {
                   <span>{row.file}</span>
                   <span>{row.score}</span>
                   <span>{row.date}</span>
-                  <button className="text-link" type="button">{row.action}</button>
+                  <button className="text-link" type="button">View</button>
                 </div>
               ))}
             </div>
