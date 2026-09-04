@@ -1,6 +1,6 @@
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import { useMemo } from "react";
-import Navbar from "../components/layout/Navbar";
+import Navbar from "../components/layout/navbar";
 import Footer from "../components/layout/Footer";
 import { useAppContext } from "../context/AppContext";
 
