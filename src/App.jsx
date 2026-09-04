@@ -1,4 +1,4 @@
-import AppRoutes from "./routes/AppRoutes";
+import AppRoutes from "./routes/Approutes";
 import { AppProvider } from "./context/AppContext";
 
 export default function App() {
