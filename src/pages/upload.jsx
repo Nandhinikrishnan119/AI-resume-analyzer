@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, FileText, Upload, X } from "lucide-react";
-import Navbar from "../components/layout/Navbar";
+import Navbar from "../components/layout/navbar";
 import Footer from "../components/layout/Footer";
 import { API_BASE, authHeaders } from "../services/api";
 import { useAppContext } from "../context/AppContext";
