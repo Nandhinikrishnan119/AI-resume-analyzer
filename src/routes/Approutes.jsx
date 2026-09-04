@@ -1,9 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "../pages/Home";
-import About from "../pages/About";
-import Upload from "../pages/Upload";
-import Dashboard from "../pages/Dashboard";
-import Login from "../pages/Login";
+
+import Home from "../pages/home";
+import About from "../pages/about";
+import Upload from "../pages/upload";
+import Dashboard from "../pages/dashboard";
+import Login from "../pages/login";
 
 export default function AppRoutes() {
   return (
