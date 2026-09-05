@@ -1,4 +1,4 @@
-# 🚀 AI Resume Analyzer — Intelligent Resume Analysis & ATS Scoring Platform
+# 🚀 ResumeAI — Intelligent Resume Analysis & ATS Scoring Platform
 
 <p align="center">
   <b>A full-stack resume analysis platform designed to help job seekers evaluate, improve, and optimize their resumes for ATS-based recruitment.</b>
